@@ -20,6 +20,15 @@ Claude suggested a composite primary key, as the result is unique and relies on 
 
 `ALTER TABLE shapes_cmtx ADD PRIMARY KEY (shape_id, shape_pt_sequence)`
 
+### Forgot a row: how I added it back in
+
+`SQL`
+
+`ALTER TABLE routes_cmtx DROP COLUMN route_text_color;`
+`ALTER TABLE routes_cmtx 
+ADD COLUMN route_color TEXT, 
+ADD COLUMN route_text_color TEXT;`
+
 
 ### Adding Geometry Columns
 
@@ -28,6 +37,17 @@ Claude suggested a composite primary key, as the result is unique and relies on 
 ```ALTER TABLE stops_cmtx ADD COLUMN geom GEOMETRY(Point, 4326);```
 
 This was for a table of bus stops and their attributes.
+
+### Altering column's data types
+
+`SQL`
+
+`ALTER TABLE stop_times_cmtx 
+ALTER COLUMN arrival_time TYPE TEXT,
+ALTER COLUMN departure_time TYPE TEXT;`
+
+When I created the stop_times_cmtx table, I assigned the `arrival_time` and `departure_time` columns to be `TIME`. This was following specification on the GTFS website.
+But when I tried to import the spreadsheet, pgAdmin4 said one of the times were out of range. Like Cinderella's spell, `TIME` doesn't work past midnight, but the busses do. Apparently the easiest solution was to change the data types from `TIME` to `TEXT`.
 
 ### Creating SRID
 
